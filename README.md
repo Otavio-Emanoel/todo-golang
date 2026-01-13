@@ -82,12 +82,28 @@ curl -s -X POST http://localhost:8080/tarefas \
   - Rate limiting básico
 
 ## Estrutura do projeto
-- `main.go`: servidor HTTP, definição de rotas e handlers.
-- `go.mod`: nome do módulo e versão alvo do Go.
+```
+todo-golang/
+├── main.go                    # Entry point da aplicação
+├── go.mod                     # Dependências e módulo
+├── models/
+│   └── tarefa.go             # Definição da struct Tarefa e banco em memória
+├── handlers/
+│   └── tarefa_handler.go     # Handlers HTTP para operações com tarefas
+└── routes/
+    └── routes.go             # Configuração centralizada de rotas
+```
+
+### Descrição dos pacotes
+- **`main.go`**: Inicializa o servidor HTTP e chama a configuração de rotas.
+- **`models/`**: Define as estruturas de dados (struct `Tarefa`) e armazenamento temporário.
+- **`handlers/`**: Contém a lógica de negócio dos handlers HTTP (`ListarTarefas`, `AdicionarTarefa`).
+- **`routes/`**: Centraliza a configuração de todas as rotas da aplicação.
 
 ## Dicas
-- Se estiver usando uma versão de Go anterior a 1.22, adapte o roteamento para `mux.HandleFunc("/tarefas", handler)` e faça o switch por método dentro do handler.
-- Para organizar melhor, considere separar `handlers`, `models` e `repos` em pacotes no futuro.
+- Se estiver usando uma versão de Go anterior a 1.22, adapte o roteamento em [routes/routes.go](routes/routes.go) para `mux.HandleFunc("/tarefas", handler)` e faça o switch por método dentro do handler.
+- A estrutura modular facilita a adição de novos recursos: basta criar novos handlers em `handlers/` e registrá-los em `routes/routes.go`.
+- Para adicionar persistência com banco de dados, crie um pacote `repository/` ou `database/` e adapte os handlers para usar o repositório ao invés de `models.BancoDeDados`.
 
 ## Licença
 Projeto educacional/demonstrativo. Use e adapte livremente.
